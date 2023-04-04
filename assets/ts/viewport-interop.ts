@@ -1,11 +1,12 @@
 const NOTIFY_BREAKPOINT_CHANGED = "BreakpointChangedAsync";
 const NOTIFY_INITIALIZED = "InitializedAsync";
+
 let _initialized = false;
+let _breakpoint = 0;
 let _ref = null;
 let _options = {
     breakpoints: {}
 }
-let _breakpoint = 0;
 function getBreakpoint() {
     let width = window.innerWidth;
     if (width >= _options.breakpoints["Xxl"])
