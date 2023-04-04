@@ -54,11 +54,11 @@ public abstract class BaseComponentBase : ComponentBase
         builder.AddMultipleAttributes(sequence++, AdditionalAttributes);
         builder.AddAttribute(sequence++, "id", Id);
         builder.AddAttribute(sequence++, "class", Classes);
-        AddToRenderTree(sequence, builder);
+        OnAddToRenderTree(sequence, builder);
         builder.CloseElement();
     }
 
-    protected virtual void AddToRenderTree(int sequence, RenderTreeBuilder builder)
+    protected virtual void OnAddToRenderTree(int sequence, RenderTreeBuilder builder)
     {
     }
 
