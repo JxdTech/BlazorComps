@@ -1,0 +1,13 @@
+.viewport {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  min-height: 100vh;
+  
+  > * {
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+}
