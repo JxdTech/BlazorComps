@@ -1,0 +1,33 @@
+@page "/viewport"
+
+<div class="page">
+    <div class="page-header">
+        <h1>Viewport</h1>
+    </div>
+    <div class="page-body">
+        <h2>Instruction</h2>
+        <p class="code-instruction">
+            Simply wrap the Viewport component around your Router in App.razor.
+        </p>
+        <h2>Demo</h2>
+        <div class="code-demo">
+            <pre>
+            <code>
+@($@"
+<Viewport>
+    <Router AppAssembly='assembly'>
+    ....
+    </Router>
+</Viewport>")
+            </code>
+        </pre>
+        </div>
+        <h2>Description</h2>
+        <p>
+            This will add breakpoint support, and provide a cascading value of IViewport which contains Breakpoint property
+        </p>
+    </div>
+    <div class="page-footer">
+
+    </div>
+</div>
