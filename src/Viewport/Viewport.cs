@@ -5,25 +5,48 @@ namespace BlazorComps;
 
 public interface IViewport
 {
-    bool IsLoaded { get; }
-    bool IsRendered { get; }
+    bool Initialized { get; }
     Breakpoint Breakpoint { get; }
-    event EventHandler OnBreakpointChanged;
 }
 
 public class Viewport : BaseComponentBase, IViewport
 {
-    private EventHandler? _onBreakpointChanged { get; set; }
-    public event EventHandler OnBreakpointChanged
+    public Breakpoint Breakpoint => BreakpointInterop.Breakpoint;
+    public bool Initialized => BreakpointInterop.Initialized;
+
+    [Inject] public IBreakpointInterop BreakpointInterop { get; set; } = default!;
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    protected override Task OnInitializedAsync()
     {
-        add => _onBreakpointChanged += value;
-        remove => _onBreakpointChanged -= value;
+        BreakpointInterop.OnInitialized = NotifyIfInitialized;
+        BreakpointInterop.OnBreakpointChanged = OnBreakpointChanged;
+        return base.OnInitializedAsync();
     }
-    public Breakpoint Breakpoint { get; private set; }
-    public bool IsRendered { get; private set; }
-    public bool IsLoaded { get; private set; }
+
+    private async ValueTask NotifyIfInitialized()
+    {
+        if (Initialized)
+            await InvokeAsync(StateHasChanged);
+    }
     
-    [Parameter] public RenderFragment ChildContent { get; set; }
+    private async ValueTask OnBreakpointChanged()
+    {
+        // no point in updating view until everything is initialized
+        // ....for now at least
+        if(!Initialized)
+            return;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await BreakpointInterop.InitializeAsync();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
 
     protected override void OnBuildClass(ClassBuilder classBuilder)
     {
@@ -34,8 +57,7 @@ public class Viewport : BaseComponentBase, IViewport
     protected override void OnAddToRenderTree(int sequence, RenderTreeBuilder builder)
     {
         builder.AddAttribute(sequence++, "data-breakpoint", Breakpoint.ToString().ToLower());
-        builder.AddAttribute(sequence++, "data-rendered", IsRendered.ToString().ToLower());
-        builder.AddAttribute(sequence++, "data-loaded", IsLoaded.ToString().ToLower());
+        builder.AddAttribute(sequence++, "data-initialized", Initialized.ToString().ToLower());
         builder.OpenComponent<CascadingValue<IViewport>>(sequence++);
         builder.AddAttribute(sequence++, "Value", this);
         builder.AddAttribute(sequence++, "ChildContent", ChildContent);
