@@ -1,5 +1,6 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 
 namespace BlazorComps;
 
@@ -46,6 +47,21 @@ public abstract class BaseComponentBase : ComponentBase
         return base.OnParametersSetAsync();
     }
 
+    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    {
+        var sequence = 0;
+        builder.OpenElement(sequence++, TagName);
+        builder.AddMultipleAttributes(sequence++, AdditionalAttributes);
+        builder.AddAttribute(sequence++, "id", Id);
+        builder.AddAttribute(sequence++, "class", Classes);
+        AddToRenderTree(sequence, builder);
+        builder.CloseElement();
+    }
+
+    protected virtual void AddToRenderTree(int sequence, RenderTreeBuilder builder)
+    {
+    }
+
     #endregion
 
     #region Properties
@@ -54,11 +70,14 @@ public abstract class BaseComponentBase : ComponentBase
 
     public string? Classes => _classBuilder.ToString();
 
-    [Inject] 
+    public virtual string TagName { get; set; } = "div";
+
+    [Inject]
     protected IClassProvider ClassProvider { get; set; } = default!;
 
     [Parameter(CaptureUnmatchedValues = true)]
     public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
 
     #endregion
 }
