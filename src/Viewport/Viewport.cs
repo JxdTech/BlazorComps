@@ -32,10 +32,6 @@ public class Viewport : BaseComponentBase, IViewport
     
     private async ValueTask OnBreakpointChanged()
     {
-        // no point in updating view until everything is initialized
-        // ....for now at least
-        if(!Initialized)
-            return;
         await InvokeAsync(StateHasChanged);
     }
 

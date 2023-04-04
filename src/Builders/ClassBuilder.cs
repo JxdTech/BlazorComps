@@ -19,9 +19,9 @@ public class ClassBuilder
             return;
         _stringBuilder.Append(value).Append(_delimiter);
     }
-    public void Append(string? value, bool condition)
+    public void Append(string? value, bool? condition)
     {
-        if(!condition)
+        if(condition is not true)
             return;
         _stringBuilder.Append(value).Append(_delimiter);
     }
