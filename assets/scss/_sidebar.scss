@@ -1,0 +1,46 @@
+@use "variables" as *;
+$sidebar-position: sticky;
+$sidebar-show-width: 4.5rem;
+$sidebar-expand-width: 14.5rem;
+$sidebar-height: 100vh;
+$sidebar-z-index: 1800;
+$sidebar-transition: width ease 0.2s, opacity ease 0.2s;
+
+.sidebar,
+[class$="-sidebar"] {
+  --#{$prefix}sidebar-position: #{$sidebar-position};
+  --#{$prefix}sidebar-show-width: #{$sidebar-show-width};
+  --#{$prefix}sidebar-expand-width: #{$sidebar-expand-width};
+  --#{$prefix}sidebar-height: #{$sidebar-height};
+  --#{$prefix}sidebar-z-index: #{$sidebar-z-index};
+  --#{$prefix}sidebar-transition: #{$sidebar-transition};
+  background-color: tomato;
+
+  position:  var(--#{$prefix}sidebar-position);
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  height: var(--#{$prefix}sidebar-height);
+  top: 0;
+  overflow-x: hidden;
+  width: 0;
+  opacity: 0;
+  z-index: 0;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: var(--#{$prefix}sidebar-transition)
+  }
+
+  &.show,
+  &.shown {
+    width: var(--#{$prefix}sidebar-show-width);
+    z-index: var(--#{$prefix}sidebar-z-index);
+    opacity: 1;
+  }
+
+  &.expand,
+  &.expanded {
+    width: var(--#{$prefix}sidebar-expand-width);
+    z-index: var(--#{$prefix}sidebar-z-index);
+  }
+}
