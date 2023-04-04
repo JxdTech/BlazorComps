@@ -48,10 +48,10 @@ public class Viewport : BaseComponentBase, IViewport
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    protected override void OnBuildClass(ClassBuilder classBuilder)
+    protected override void OnBuildClass(ClassBuilder builder)
     {
-        classBuilder.Append(ClassProvider.Viewport);
-        base.OnBuildClass(classBuilder);
+        builder.Append(ClassProvider.Viewport);
+        base.OnBuildClass(builder);
     }
 
     protected override void OnAddToRenderTree(int sequence, RenderTreeBuilder builder)

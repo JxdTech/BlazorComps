@@ -4,10 +4,6 @@ namespace BlazorComps;
 
 public abstract class BaseComponent : BaseComponentBase
 {
-    #region Properties
-
     [CascadingParameter] 
     protected IViewport Viewport { get; set; } = default!;
-
-    #endregion
 }

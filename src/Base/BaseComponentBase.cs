@@ -6,27 +6,30 @@ namespace BlazorComps;
 
 public abstract class BaseComponentBase : ComponentBase
 {
-    #region Members
 
     private string? _class;
     private readonly ClassBuilder _classBuilder;
+    public string? Id { get; private set; }
 
-    #endregion
+    public string? Classes => _classBuilder.ToString();
 
-    #region Constructors
+    public virtual string TagName { get; set; } = "div";
+
+    [Inject]
+    protected IClassProvider ClassProvider { get; set; } = default!;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+    
 
     protected BaseComponentBase()
     {
         _classBuilder = new ClassBuilder(OnBuildClass);
     }
 
-    #endregion
-
-    #region Mehods
-
-    protected virtual void OnBuildClass(ClassBuilder classBuilder)
+    protected virtual void OnBuildClass(ClassBuilder builder)
     {
-        classBuilder.Append(_class);
+        builder.Append(_class);
     }
 
     protected override Task OnParametersSetAsync()
@@ -61,23 +64,4 @@ public abstract class BaseComponentBase : ComponentBase
     protected virtual void OnAddToRenderTree(int sequence, RenderTreeBuilder builder)
     {
     }
-
-    #endregion
-
-    #region Properties
-
-    public string? Id { get; private set; }
-
-    public string? Classes => _classBuilder.ToString();
-
-    public virtual string TagName { get; set; } = "div";
-
-    [Inject]
-    protected IClassProvider ClassProvider { get; set; } = default!;
-
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
-
-
-    #endregion
 }
